@@ -1,6 +1,7 @@
-import Image from 'next/image';
 import * as FEAAS from '@sitecore-feaas/clientside/react';
 import nextConfig from 'next.config';
+import Image from 'next/image';
+import AuthorHint from './AuthorHint/AuthorHint';
 // Element implementations for Sitecore Component Builder can be overriden here
 
 const FEAASScripts = (): JSX.Element => {
@@ -42,6 +43,13 @@ const FEAASScripts = (): JSX.Element => {
         {...imgAttributes}
       />
     );
+  });
+
+  // Check this out!
+  FEAAS.setElementImplementation('mycomponent', (attributes: Record<string, string>) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { children, src, alt, ...imgAttributes } = attributes;
+    return <AuthorHint hint="Magic" />;
   });
 
   return <></>;
