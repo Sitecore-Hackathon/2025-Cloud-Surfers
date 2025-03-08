@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import uploadMediaInSitecore from './uploadMediaInSitecore';
+import uploadMediaInSitecore from 'src/lib/sitecore-media/uploadMediaInSitecore';
 
 export const dynamic = 'force-dynamic'; // defaults to auto
 export const revalidate = 0;
@@ -9,6 +9,8 @@ interface bodyIncoming {
   content: string;
   fileName: string;
 }
+
+/* POST JS to Media Library */
 export async function POST(request: Request) {
   const body: bodyIncoming = await request.json();
 
@@ -19,6 +21,7 @@ export async function POST(request: Request) {
     publishItem: true,
   };
 
+  // TODO: Add request filter for better vulnerability protection
   const uploadMediaInSitecoreResponse = await uploadMediaInSitecore(mediaProps);
 
   return NextResponse.json<string>(JSON.stringify(uploadMediaInSitecoreResponse));

@@ -1,10 +1,9 @@
-import { getToken } from './fetch';
-import { updateMediaFileGraphQL } from './graphql';
-import { UpdateMediaItem } from './type';
+import { updateMediaFileGraphQL } from './graphql/graphql';
+import { UpdateMediaItem } from './graphql/type';
+import { getToken } from './utils/getToken';
 
 /**
- * fetch custom Site Info using GraphQL
- * @returns The GraphQL response for Custom Site Info
+ * UPDATE Existing Media Item
  */
 const updateMediaFileInSitecore = async (
   itemPath: string,

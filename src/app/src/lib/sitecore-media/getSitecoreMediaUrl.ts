@@ -1,5 +1,6 @@
-import { getMediaPrerenderUrlGraphQL } from './graphql';
-import { PreSignedUploadUrl } from './type';
+import { getMediaPrerenderUrlGraphQL } from "./graphql/graphql";
+import { PreSignedUploadUrl } from "./graphql/type";
+
 
 const getSitecoreMediaUrl = async (itemPath: string, token: string): Promise<string> => {
   const endpoint = process.env.GRAPH_QL_AUTHORING_ENDPOINT as string;

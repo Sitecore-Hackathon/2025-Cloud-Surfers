@@ -2,23 +2,24 @@ import fs from 'fs';
 import path from 'path';
 
 /*
-  METADATA GENERATION
-  Generates the /src/temp/metadata.json file which contains application 
-  configuration metadata that is used for Sitecore XM Cloud integration.
+  DEPLOY - Step 1
+  Prepare parcel files for build.
+  We reuse these, replacing for each component to output
 */
-prep('/src/components/AuthorHint/AuthorHint', 'Ie9TtFs25F');
-// TODO: pass component name from CLI
+/* UPDATE THIS PATH FOR YOUR COMPONENT TO DEPLOY */
+prep('/src/components/AuthorHint/AuthorHint'); // TODO: pass component name from CLI
 
-function prep(componentFile: string, instanceId: string): void {
-  writeParcelComponentFile(componentFile, instanceId);
+
+function prep(componentFile: string): void {
+  writeParcelComponentFile(componentFile);
 }
 
 /**
  * Writes the metadata object to disk.
  * @param {Metadata} metadata metadata to write.
  */
-function writeParcelComponentFile(componentFile: string, instanceId: string): void {
-    console.log('TBD', instanceId); // TODO: use unique match for multiple components
+function writeParcelComponentFile(componentFile: string): void {
+    // console.log('TBD', instanceId); // TODO: use unique match for multiple components
   const rcComponentName = getComponentNameFromFile(componentFile);
   // const props = {}; // TODO: consider supporting props
   const file = `import React from 'react';

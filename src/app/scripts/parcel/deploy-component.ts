@@ -1,24 +1,26 @@
 import SDK from '@sitecore-feaas/sdk';
 import fs from 'fs';
+import uploadMediaInSitecore from 'lib/sitecore-media/uploadMediaInSitecore';
 import path from 'path';
-import uploadMediaInSitecore from 'src/app/api/media/uploadMediaInSitecore';
 
 /*
-  Deploys latest Parcel component to Sitecore FEaaS
+  DEPLOY -Step 3
+  Push latest Parcel component output to Sitecore FEaaS
 */
 
-const SitecoreRootPath = 'Project/clientprefix/CloudSurfers';
-const EdgeLibrary = 'https://edge.sitecorecloud.io/americaneag94e0-eaglekitba18-demo1b79-2869/media';
+/* UPDATE THIS PATH FOR YOUR COMPONENT TO DEPLOY */
+deploy('AuthorHint', 'Cat Fact'); // TODO: pass name from CLI/script
 
-deploy('AuthorHint'); // TODO: pass name
+const SitecoreRootPath = process.env.MEDIA_IMPORT_ROOT_PATH_WITHOUT_MEDIA;
+const EdgeLibrary = process.env.MEDIA_EDGE_ENDPOINT;
 
-async function deploy(name: string): Promise<void> {
+async function deploy(name: string, feaasName: string): Promise<void> {
   const styles = readStyles();
   const js = readJS();
 
   const jsRef = await publishToMediaLib(name, js);
   
-  await pushToComponentService(styles, jsRef);
+  await pushToComponentService(feaasName, styles, jsRef);
 }
 
 // ============ READ JS AND CSS FROM PARCEL OUTPUT =====================
@@ -65,13 +67,13 @@ async function publishToMediaLib(name: string, contents: string): Promise<string
   console.log('UPLOAD SUCCESS',uploadMediaInSitecoreResponse)
   
   // Match the published url (optimistically)
-  const jsRef = `${EdgeLibrary}/${SitecoreRootPath}/${name}.js`; // NOTE: needs .js suffix to load
+  const jsRef = `${EdgeLibrary}/${SitecoreRootPath}${name}.js`; // NOTE: needs .js suffix to load
   return jsRef;
 }
 
 // ====================================== UPLOAD COMPONENT TO FEAAS =======================
 
-async function pushToComponentService(styles: string, jsRef: string) {
+async function pushToComponentService(componentName: string, styles: string, jsRef: string) {
     const instanceId = 'Ie9TtFs25F'; // DO WE NEED THIS?
     const defaultStyles = `
     .magic-box {
@@ -93,7 +95,7 @@ async function pushToComponentService(styles: string, jsRef: string) {
     }`
     ;
   const view = `<style data-format-version=\"30\">${defaultStyles} ${styles}</style><section class=\"-grid--custom\" data-instance-id=\"${instanceId}\"><div class="magic-box"></div><div class=\"-embed\" data-embed-src=\"${jsRef}\"></div></section>`;
-  await uploadToFEaaS(view);
+  await uploadToFEaaS(componentName, view);
 }
 
 const sdk = new SDK({
@@ -110,10 +112,9 @@ const sdk = new SDK({
 });
 
 // ASSUMES COMPONENT ALREADY EXISTS. THIS WILL REPLACE CONTENTS on saved slot of latest version.
-const uploadToFEaaS = async (view: string) => {
+const uploadToFEaaS = async (componentName:string, view: string) => {
   // TODO - make more dynamic
   const libraryId = '4pYetcyUyDv5bBt13c2X8W';
-  const componentName = 'Cat Fact';
 
   // Access library
   const library = await sdk.libraries.get({ id: libraryId });

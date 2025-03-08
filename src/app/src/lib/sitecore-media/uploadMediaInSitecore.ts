@@ -1,7 +1,8 @@
-import { getToken } from './fetch';
+
 import getSitecoreMediaUrl from './getSitecoreMediaUrl';
+import { UploadMedia } from './graphql/type';
 import publishMediaItemInSitecore from './publishMediaItemInSitecore';
-import { UploadMedia } from './type';
+import { getToken } from './utils/getToken';
 
 /**
  * fetch custom Site Info using GraphQL
