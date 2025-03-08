@@ -54,12 +54,10 @@ Before starting the application locally, ensure you complete the following steps
   MEDIA_IMPORT_ROOT_PATH_WITHOUT_MEDIA=<your_media_import_path>
   MEDIA_EDGE_ENDPOINT=<your_media_edge_endpoint>
   ```
+
+Below, you will find how to get the required .env.local values
+
 #### GraphQL Endpoint
-
-The /src/datasyncapp/.env file needs two values:
-
-1. GraphQL Endpoint
-2. XM Cloud Access Token
 
 To get the **GraphQL Endpoint**, visit this URL: https://deploy.sitecorecloud.io
 
@@ -72,8 +70,15 @@ Then, click on the name of your project under the "Environments tab"
 Finally, click on the "Details" tab and copy the link from the bottom, where it says "Authoring GraphQL IDE". This is your **GraphQL Endpoint**.
 ![GraphQL3](docs/images/GraphQL_3.png?raw=true "GraphQL3")
 
+#### Client ID/Client Secret
+
+#### Token Endpoint
+
+#### Media Import Part
+
+#### Media Edge Endpoint
   
-#### Steps to Start the Application
+### Steps to Start the Application
 1. Open a terminal or command prompt and navigate to the root of the project.
 2. Change to the application directory:
    ```sh
@@ -93,9 +98,3 @@ The deployment process consists of three sequential steps, managed by specific s
 | `deploy-1` | Prepares parcel files for export, ensuring all required assets are included. |
 | `deploy-2` | Executes the parcel build process to generate optimized assets.              |
 | `deploy-3` | Pushes HTML, CSS, and JavaScript files to the Media Library and FEaaS.       |
-
-
-
-
-
-
