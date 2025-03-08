@@ -1,5 +1,5 @@
-import { publishMediaItemGraphQL } from "./graphql/graphql";
-import { PublishJob } from "./graphql/type";
+import { publishMediaItemGraphQL } from "../graphql/graphql";
+import { PublishJob } from "../graphql/type";
 
 const publishMediaItemInSitecore = async (
   itemPath: string,

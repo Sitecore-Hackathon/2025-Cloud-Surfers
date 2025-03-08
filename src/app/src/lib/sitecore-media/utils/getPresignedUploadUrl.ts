@@ -1,8 +1,8 @@
-import { getMediaPrerenderUrlGraphQL } from "./graphql/graphql";
-import { PreSignedUploadUrl } from "./graphql/type";
+import { getMediaPrerenderUrlGraphQL } from "../graphql/graphql";
+import { PreSignedUploadUrl } from "../graphql/type";
 
 
-const getSitecoreMediaUrl = async (itemPath: string, token: string): Promise<string> => {
+const getPresignedUploadUrl = async (itemPath: string, token: string): Promise<string> => {
   const endpoint = process.env.GRAPH_QL_AUTHORING_ENDPOINT as string;
   const mediaItemPath = process.env.MEDIA_IMPORT_ROOT_PATH_WITHOUT_MEDIA + itemPath;
   const data = {
@@ -28,4 +28,4 @@ const getSitecoreMediaUrl = async (itemPath: string, token: string): Promise<str
     : '';
 };
 
-export default getSitecoreMediaUrl;
+export default getPresignedUploadUrl;

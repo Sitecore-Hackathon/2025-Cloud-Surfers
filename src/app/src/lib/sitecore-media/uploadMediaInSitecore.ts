@@ -1,12 +1,13 @@
 
-import getSitecoreMediaUrl from './getSitecoreMediaUrl';
 import { UploadMedia } from './graphql/type';
-import publishMediaItemInSitecore from './publishMediaItemInSitecore';
+import getPresignedUploadUrl from './utils/getPresignedUploadUrl';
 import { getToken } from './utils/getToken';
+import postMediaToSitecore from './utils/postMediaToSitecore';
 
 /**
- * fetch custom Site Info using GraphQL
- * @returns The GraphQL response for Custom Site Info
+ * PURPOSE: Upload our JS file to Sitecore media library
+ * See Docs for overview of process: https://doc.sitecore.com/xp/en/developers/latest/sitecore-experience-manager/en%20%20/query-examples-for-authoring-operations.html#upload-media
+ * Big thanks to Gaurav for node.js implementation example here! https://github.com/gauravpansari1991/XMCloudImageImport
  */
 
 export interface uploadMediaInSitecoreProps {
@@ -21,23 +22,20 @@ const uploadMediaInSitecore = async ({
   fileName,
   publishItem,
 }: uploadMediaInSitecoreProps): Promise<UploadMedia> => {
-  const getAuthToken = await getToken();
-  const endpoint = await getSitecoreMediaUrl(mediapath, getAuthToken);
-  const blob = new Blob([content], { type: 'text/javascript' });
-  const data = new FormData();
-  data.append('file', blob, fileName);
-  const response = await fetch(endpoint, {
-    method: 'POST',
-    body: data,
-    headers: {
-      Authorization: `Bearer ${getAuthToken}`,
-    },
-  });
-  const uploadMediaJson = (await response.json()) as UploadMedia;
-  if (publishItem && uploadMediaJson.ItemPath) {
-    publishMediaItemInSitecore(uploadMediaJson.ItemPath, getAuthToken);
-  }
-  return uploadMediaJson;
+  const authToken = await getToken();
+
+  const presignedUploadUrl = await getPresignedUploadUrl(mediapath, authToken);
+
+  const uploadResponse = await postMediaToSitecore({
+    content,
+    contentType: 'text/javascript',
+    authToken,
+    fileName,
+    presignedUploadUrl: presignedUploadUrl,
+    publishItem
+  }) 
+
+  return uploadResponse;
 };
 
 export default uploadMediaInSitecore;
