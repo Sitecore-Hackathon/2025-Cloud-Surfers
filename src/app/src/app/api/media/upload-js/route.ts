@@ -1,9 +1,11 @@
+import uploadMediaToSitecore, { UploadMediaToSitecoreProps } from 'lib/sitecore-media/uploadMediaToSitecore';
 import { NextResponse } from 'next/server';
-import uploadMediaInSitecore from 'src/lib/sitecore-media/uploadMediaInSitecore';
 
 export const dynamic = 'force-dynamic'; // defaults to auto
 export const revalidate = 0;
-
+/* THIS ROUTE IS NOT USED FOR OUR HACKATHON SOLUTION
+Just a bonus (but would need to be better protected)
+*/
 interface bodyIncoming {
   name: string;
   content: string;
@@ -14,7 +16,7 @@ interface bodyIncoming {
 export async function POST(request: Request) {
   const body: bodyIncoming = await request.json();
 
-  const mediaProps = {
+  const mediaProps: UploadMediaToSitecoreProps = {
     content: body.content,
     mediapath: body.name,
     fileName: body.fileName,
@@ -22,7 +24,7 @@ export async function POST(request: Request) {
   };
 
   // TODO: Add request filter for better vulnerability protection
-  const uploadMediaInSitecoreResponse = await uploadMediaInSitecore(mediaProps);
+  const uploadMediaInSitecoreResponse = await uploadMediaToSitecore(mediaProps);
 
   return NextResponse.json<string>(JSON.stringify(uploadMediaInSitecoreResponse));
 }

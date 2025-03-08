@@ -1,6 +1,6 @@
 import SDK from '@sitecore-feaas/sdk';
 import fs from 'fs';
-import uploadMediaInSitecore from 'lib/sitecore-media/uploadMediaInSitecore';
+import uploadMediaToSitecore, { UploadMediaToSitecoreProps } from 'lib/sitecore-media/uploadMediaToSitecore';
 import path from 'path';
 
 /*
@@ -54,7 +54,7 @@ function extractScriptSrc(htmlString: string) {
 // ============ UPLOAD JS TO MEDIA LIB =====================
 async function publishToMediaLib(name: string, contents: string): Promise<string> {
     
-  const mediaProps = {
+  const mediaProps: UploadMediaToSitecoreProps = {
     content: contents,
     mediapath: name,
     fileName: `${name}.js`, // Needs file extension for Media Lib to import correctly
@@ -62,7 +62,7 @@ async function publishToMediaLib(name: string, contents: string): Promise<string
   };
 
   console.log('UPLOADING to Sitecore...', name, `${contents.substring(0, 20)}...`);
-  const uploadMediaInSitecoreResponse = await uploadMediaInSitecore(mediaProps);
+  const uploadMediaInSitecoreResponse = await uploadMediaToSitecore(mediaProps);
   // NOTE: this just kicks off publishing, does not wait for it.
   console.log('UPLOAD SUCCESS',uploadMediaInSitecoreResponse)
   

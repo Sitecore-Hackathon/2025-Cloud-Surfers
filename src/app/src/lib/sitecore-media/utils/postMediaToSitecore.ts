@@ -29,6 +29,8 @@ const postMediaToSitecore = async ({
   const data = new FormData();
   data.append('file', blob, fileName);
 
+  // TODO: Add logic for update vs add new
+  
   const response = await fetch(presignedUploadUrl, {
     method: 'POST',
     body: data,
@@ -36,7 +38,7 @@ const postMediaToSitecore = async ({
       Authorization: `Bearer ${authToken}`,
     },
   });
-  
+
   const uploadMediaJson = (await response.json()) as UploadMedia;
 
   if (publishItem && uploadMediaJson.ItemPath) {

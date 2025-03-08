@@ -10,18 +10,18 @@ import postMediaToSitecore from './utils/postMediaToSitecore';
  * Big thanks to Gaurav for node.js implementation example here! https://github.com/gauravpansari1991/XMCloudImageImport
  */
 
-export interface uploadMediaInSitecoreProps {
+export interface UploadMediaToSitecoreProps {
   content: string;
   mediapath: string;
   fileName: string;
   publishItem?: boolean;
 }
-const uploadMediaInSitecore = async ({
+const uploadMediaToSitecore = async ({
   content,
   mediapath,
   fileName,
   publishItem,
-}: uploadMediaInSitecoreProps): Promise<UploadMedia> => {
+}: UploadMediaToSitecoreProps): Promise<UploadMedia> => {
   const authToken = await getToken();
 
   const presignedUploadUrl = await getPresignedUploadUrl(mediapath, authToken);
@@ -31,11 +31,11 @@ const uploadMediaInSitecore = async ({
     contentType: 'text/javascript',
     authToken,
     fileName,
-    presignedUploadUrl: presignedUploadUrl,
+    presignedUploadUrl,
     publishItem
   }) 
 
   return uploadResponse;
 };
 
-export default uploadMediaInSitecore;
+export default uploadMediaToSitecore;

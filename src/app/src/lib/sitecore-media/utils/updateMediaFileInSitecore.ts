@@ -1,17 +1,16 @@
-import { updateMediaFileGraphQL } from './graphql/graphql';
-import { UpdateMediaItem } from './graphql/type';
-import { getToken } from './utils/getToken';
+import { updateMediaFileGraphQL } from '../graphql/graphql';
+import { UpdateMediaItem } from '../graphql/type';
 
 /**
  * UPDATE Existing Media Item
+ * ** FUNCTION NOT TESTED YET
  */
 const updateMediaFileInSitecore = async (
   itemPath: string,
-  fieldValue: string
+  fieldValue: string,
+  authToken: string,
 ): Promise<UpdateMediaItem> => {
   const endpoint = process.env.GRAPH_QL_AUTHORING_ENDPOINT as string;
-
-  const getAuthToken = await getToken();
 
   const data = {
     query: updateMediaFileGraphQL,
@@ -26,7 +25,7 @@ const updateMediaFileInSitecore = async (
     body: JSON.stringify(data),
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${getAuthToken}`,
+      Authorization: `Bearer ${authToken}`,
     },
   });
   const updateMediaFileJson = (await response.json()) as UpdateMediaItem;
