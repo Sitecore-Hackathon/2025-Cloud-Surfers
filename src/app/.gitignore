@@ -31,3 +31,8 @@ scjssconfig.json
 
 # vercel
 .vercel
+
+# parcle
+.parcel-cache
+dist
+/src/parcel/component.js

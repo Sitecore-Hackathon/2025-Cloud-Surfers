@@ -6,7 +6,7 @@ type AuthorHintProps = React.ComponentPropsWithoutRef<'div'> & {
   hint?: string;
 };
 
-const AuthorHint: React.FC<AuthorHintProps> = ({ hint, children, ...rest }) => {
+const AuthorHint: React.FC<AuthorHintProps> = ({ hint = 'It works!', children, ...rest }) => {
   // const { sitecoreContext } = useSitecoreContext();
   // !sitecoreContext?.pageEditing ? null :
   return (
