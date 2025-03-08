@@ -34,6 +34,7 @@
     "@sitecore-cloudsdk/core": "^0.4.2",
     "@sitecore-cloudsdk/events": "^0.4.2",
     "@sitecore-feaas/clientside": "^0.5.19",
+    "@sitecore-feaas/sdk": "^0.3.7",
     "@sitecore-jss/sitecore-jss-nextjs": "~22.5.2",
     "@sitecore/components": "~2.0.1",
     "bootstrap": "^5.1.3",

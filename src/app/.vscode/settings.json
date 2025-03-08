@@ -1,0 +1,9 @@
+{
+  // enable globally (here: format on save)
+  "editor.codeActionsOnSave": ["source.organizeImports", "source.fixAll", "source.fixAll.eslint"],
+  "editor.rulers": [100],
+  "[scss]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
+}

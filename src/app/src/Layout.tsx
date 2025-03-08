@@ -1,11 +1,11 @@
 /**
  * This Layout is needed for Starter Kit.
  */
-import React from 'react';
+import { Field, HTMLLink, LayoutServiceData, Placeholder } from '@sitecore-jss/sitecore-jss-nextjs';
+import { Sandbox } from 'components/Sandbox';
 import Head from 'next/head';
-import { Placeholder, LayoutServiceData, Field, HTMLLink } from '@sitecore-jss/sitecore-jss-nextjs';
-import config from 'temp/config';
 import Scripts from 'src/Scripts';
+import config from 'temp/config';
 
 // Prefix public assets with a public URL to enable compatibility with Sitecore Experience Editor.
 // If you're not supporting the Experience Editor, you can remove this.
@@ -45,6 +45,7 @@ const Layout = ({ layoutData, headLinks }: LayoutProps): JSX.Element => {
         </header>
         <main>
           <div id="content">{route && <Placeholder name="headless-main" rendering={route} />}</div>
+          <Sandbox />
         </main>
         <footer>
           <div id="footer">{route && <Placeholder name="headless-footer" rendering={route} />}</div>
