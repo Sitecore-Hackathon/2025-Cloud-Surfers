@@ -1,12 +1,6 @@
 import React from 'react';
-
 import { createRoot } from 'react-dom/client';
-
 import AuthorHint from '/src/components/AuthorHint/AuthorHint';
 
-
-
-const root = createRoot(document.getElementById('app'));
-
+const root = createRoot(document.getElementsByClassName('magic-box')[0]);
 root.render(<AuthorHint />);
-

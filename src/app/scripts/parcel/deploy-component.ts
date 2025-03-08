@@ -1,21 +1,23 @@
 import SDK from '@sitecore-feaas/sdk';
 import fs from 'fs';
 import path from 'path';
+import uploadMediaInSitecore from 'src/app/api/media/uploadMediaInSitecore';
 
 /*
-  METADATA GENERATION
-  Generates the /src/temp/metadata.json file which contains application 
-  configuration metadata that is used for Sitecore XM Cloud integration.
+  Deploys latest Parcel component to Sitecore FEaaS
 */
+
+const SitecoreRootPath = 'Project/clientprefix/CloudSurfers';
+const EdgeLibrary = 'https://edge.sitecorecloud.io/americaneag94e0-eaglekitba18-demo1b79-2869/media';
+
 deploy('AuthorHint'); // TODO: pass name
 
 async function deploy(name: string): Promise<void> {
   const styles = readStyles();
   const js = readJS();
 
-  await publishToMediaLib(name, js);
-
-  const jsRef = `https://edge.sitecorecloud.io/americaneag94e0-eaglekitba18-demo1b79-2869/media/Project/clientprefix/CloudSurfers/${name}.js`; // NOTE: needs .js suffix to load
+  const jsRef = await publishToMediaLib(name, js);
+  
   await pushToComponentService(styles, jsRef);
 }
 
@@ -23,7 +25,6 @@ async function deploy(name: string): Promise<void> {
 
 function readStyles(): string {
   const filePath = path.resolve('dist/index.html');
-  console.log(`reading parcel file ${filePath}`);
   const file = fs.readFileSync(filePath, { encoding: 'utf8' });
   const cssFileName = extractStyleSrc(file);
   const styles = fs.readFileSync(`dist/${cssFileName}`, { encoding: 'utf8' });
@@ -32,7 +33,6 @@ function readStyles(): string {
 
 function readJS(): string {
   const filePath = path.resolve('dist/index.html');
-  console.log(`reading parcel file ${filePath}`);
   const file = fs.readFileSync(filePath, { encoding: 'utf8' });
   const jsFileName = extractScriptSrc(file);
   const js = fs.readFileSync(`dist/${jsFileName}`, { encoding: 'utf8' });
@@ -50,14 +50,49 @@ function extractScriptSrc(htmlString: string) {
 }
 
 // ============ UPLOAD JS TO MEDIA LIB =====================
-function publishToMediaLib(name: string, contents: string) {
-  console.log(name, contents.substring(0, 20));
+async function publishToMediaLib(name: string, contents: string): Promise<string> {
+    
+  const mediaProps = {
+    content: contents,
+    mediapath: name,
+    fileName: `${name}.js`, // Needs file extension for Media Lib to import correctly
+    publishItem: true,
+  };
+
+  console.log('UPLOADING to Sitecore...', name, `${contents.substring(0, 20)}...`);
+  const uploadMediaInSitecoreResponse = await uploadMediaInSitecore(mediaProps);
+  // NOTE: this just kicks off publishing, does not wait for it.
+  console.log('UPLOAD SUCCESS',uploadMediaInSitecoreResponse)
+  
+  // Match the published url (optimistically)
+  const jsRef = `${EdgeLibrary}/${SitecoreRootPath}/${name}.js`; // NOTE: needs .js suffix to load
+  return jsRef;
 }
 
 // ====================================== UPLOAD COMPONENT TO FEAAS =======================
 
 async function pushToComponentService(styles: string, jsRef: string) {
-  const view = `<styles>${styles}</styles><section class=\"-grid--custom\" data-instance-id=\"Ie9TtFs25F\"><div><h1 class=\"-heading1--fisher--heading\" data-instance-id=\"Rcyt5iTKJ3\">alert(\"hi\");</h1><p class=\"-lines-- -palette--E85e0KXcyt\" data-instance-id=\"C42NPwzfp6\"><var data-path=\"x8bdvhKTE7.fact\"></var></p><button class=\"-button--fisher--button--hover\" data-instance-id=\"4MwwlunW11\">Click me</button></div><div class=\"-embed\" data-embed-src=\"${jsRef}\"><mycomponent example=\"myprop\"></mycomponent></div></section><div id="app"></div>`;
+    const instanceId = 'Ie9TtFs25F'; // DO WE NEED THIS?
+    const defaultStyles = `
+    .magic-box {
+        grid-column: 1;
+        grid-column-end: 13;
+        grid-row: 1;
+        grid-row-end: 6;
+        order: 0;
+        position: relative;
+        ---self--display: flex;
+        display: var(---self--display);
+        flex-wrap: nowrap;
+        flex-direction: column;
+        justify-content: stretch;
+        align-items: stretch;
+        row-gap: calc(var(---supports--flex-gap, 0)* var(---spacing--row-gap));
+        column-gap: calc(var(---supports--flex-gap, 0)* var(---spacing--column-gap));
+        max-width: min(var(---self--max-available-width, 100%), var(---self--max-width, 100%));
+    }`
+    ;
+  const view = `<style data-format-version=\"30\">${defaultStyles} ${styles}</style><section class=\"-grid--custom\" data-instance-id=\"${instanceId}\"><div class="magic-box"></div><div class=\"-embed\" data-embed-src=\"${jsRef}\"></div></section>`;
   await uploadToFEaaS(view);
 }
 
@@ -97,17 +132,20 @@ const uploadToFEaaS = async (view: string) => {
         //   console.log('    |- Version: ', version.name);
         // }
         const versions = await component.versions.fetch();
-        const maxR = versions.reduce((x, v) => Math.max(x, v.revision), 0);
+        const maxR = versions.reduce((x, v) => {
+            const maxV = Math.max(x.number, v.revision);
+        return {number: maxV, id: maxV == x.number ? x.id : v.id}}, {number: 0, id: ''});
         console.log('MAX R', maxR);
 
         // NOTE: target 'saved' version to edit latest. Use Component builder to stage and publish.
-        const v = await versions.get({ revision: maxR, status: 'saved', id: 'kXB7h9YxoI' });
-        if (v.revision == maxR) {
+        const v = await versions.get({ revision: maxR.number, status: 'saved', id: maxR.id });
+        if (v.revision == maxR.number) {
           v.view = view;
-          // console.log(v.view);
+          console.log('SAVING view', v.view);
           v.revision++; // IMPORTANT: must update revision for it to save!!
+          v.modifiedAt = new Date();
           await v.adapter.save(v);
-          break;
+          return;
         }
       }
     }
