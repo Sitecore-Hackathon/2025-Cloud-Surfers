@@ -89,14 +89,14 @@ would look similar to this: https://edge.sitecorecloud.io/[XM-Cloud-SUBDOMAIN]-[
    ```
 
 ## Deployment Process for FEaaS
-Once a component has been built, the following script can be run to deploy it. We built a sample component called *AuthorHint*, which can be found here: \src\app\src\components\AuthorHint
+Once a component has been built, the following script can be run to deploy it. We built a sample component called *AuthorHint*, which can be found here: `\src\app\src\components\AuthorHint`
 
 Currently, there are two areas in the deployment scripts that need to be updated with the correct component name.
 
-The component will need to be updated in \scripts\parcel\deploy-component.ts
+The component will need to be updated in `\scripts\parcel\deploy-component.ts`
 ![deploy-component](docs/images/deploy-component.png?raw=true "deploy-component")
 
-The component will need to be updated in \scripts\parcel\prep-component.ts
+The component will need to be updated in `\scripts\parcel\prep-component.ts`
 ![prep-component](docs/images/prep-component.png?raw=true "prep-component")
 
 The deployment process consists of three sequential steps, managed by specific scripts. The **deploy** script can be used, since it runs everything needed to deploy for FEaaS. To run, enter *npm run deploy* in the root of your solution.
