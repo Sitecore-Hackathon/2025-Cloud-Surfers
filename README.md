@@ -81,12 +81,12 @@ Enter the details in the pop up window.
 
 Click create and copy and store the Client Id and Client Secret. You cannot retrieve the Client secret once this window is closed.
 ![AUTHORINGGraphQL3](docs/images/Content-Authoring-Creds3.png?raw=true "AUTHORINGGraphQL3")
-#### Token Endpoint
 
 #### Media Edge Endpoint
+NEED TO UPDATE BEFORE SUBMISSION
 would look similar to this: https://edge.sitecorecloud.io/[XM-Cloud-SUBDOMAIN]-[????]/media' # Should end with /media
 
-### Steps to Start the Application
+## Steps to Start the Application
 1. Open a terminal or command prompt and navigate to the root of the project.
 2. Change to the application directory:
    ```sh
@@ -97,8 +97,18 @@ would look similar to this: https://edge.sitecorecloud.io/[XM-Cloud-SUBDOMAIN]-[
    npm run start:connected
    ```
 
-### Deployment Process for FEaaS
-The deployment process consists of three sequential steps, managed by specific scripts:
+## Deployment Process for FEaaS
+Once a component has been built, the following script can be run to deploy it. We built a sample component called *AuthorHint*, which can be found here: \src\app\src\components\AuthorHint
+
+Currently, there are two areas in the deployment scripts that need to be updated with the correct component name.
+
+The component will need to be updated in \scripts\parcel\deploy-component.ts
+![deploy-component](docs/images/deploy-component.png?raw=true "deploy-component")
+
+The component will need to be updated in \scripts\parcel\prep-component.ts
+![prep-component](docs/images/prep-component.png?raw=true "prep-component")
+
+The deployment process consists of three sequential steps, managed by specific scripts. The **deploy** script can be used, since it runs everything needed to deploy for FEaaS. To run, enter *npm run deploy* in the root of your solution.
 
 | Script     | Description                                                                  |
 | ---------- | ---------------------------------------------------------------------------- |
