@@ -117,7 +117,7 @@ The deployment process consists of three sequential steps, managed by specific s
 ## Appendix
 
 This Next.js app was created as a Vanilla Sitecore JSS App using this command:<br />
-`npx create-sitecore-jss@latest --yes --destination app --appName app --templates "nextjs, nextjs-sxa, nextjs-multisite, nextjs-xmcloud"`
+```npx create-sitecore-jss@latest --yes --destination app --appName app --templates "nextjs, nextjs-sxa, nextjs-multisite, nextjs-xmcloud"```
 
 #### Notable Custom Code Reference
 | Code Area    | Description                                                                  |
