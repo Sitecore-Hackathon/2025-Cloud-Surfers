@@ -8,20 +8,20 @@
 
 ## Category
 
-XM Cloud Component Builder Enhancement
+XM Cloud Component Builder Extension
 
 ## Description
 
-Adds ability to create new dynamic components in XM Cloud without a code deployment.
+Adds ability to create coded components without a code deployment.
 
 There are three parts to this submission:
--   Exporting custom component using the Parcel build tool
+-   Exporting React component using the Parcel.js build tool
 -   Uploading Parcel-generated javascript to the Sitecore media library using Sitecore Content Authoring APIs
--   Updating the latest saved version of a specified component's view in a FEaaS (Front-End as a Service) library by fetching all dependencies, identifying the latest revision, modifying its view, and saving the changes.
+-   Updating the latest saved version of a specified FEaaS (Front-End as a Service) component's view by fetching all dependencies, identifying the latest revision, modifying its view, and saving the changes through the [Sitecore FEaaS SDK](https://www.npmjs.com/package/@sitecore-feaas/sdk)
 
 ## Video link
 
-⟹ [Submission Title](XXX)
+⟹ [Video Walkthrough](https://youtu.be/UO0M1N67-7c)
 
 ## Pre-requisites and Dependencies
 
@@ -74,8 +74,8 @@ Click create and copy and store the Client Id and Client Secret. You cannot retr
 ![AUTHORINGGraphQL3](docs/images/Content-Authoring-Creds3.png?raw=true "AUTHORINGGraphQL3")
 
 #### Media Edge Endpoint
-NEED TO UPDATE BEFORE SUBMISSION
-would look similar to this: https://edge.sitecorecloud.io/[XM-Cloud-SUBDOMAIN]-[????]/media' # Should end with /media
+See video for way to find this value.
+																													 
 
 ## Steps to Start the Application
 1. Open a terminal or command prompt and navigate to the root of the project.
@@ -93,13 +93,19 @@ Once a component has been built, the following script can be run to deploy it. W
 
 Currently, there are two areas in the deployment scripts that need to be updated with the correct component name.
 
-The component will need to be updated in `\scripts\parcel\deploy-component.ts`
-![deploy-component](docs/images/deploy-component.png?raw=true "deploy-component")
-
-The component will need to be updated in `\scripts\parcel\prep-component.ts`
+The component will need to be updated in: `\scripts\parcel\prep-component.ts`
 ![prep-component](docs/images/prep-component.png?raw=true "prep-component")
 
-The deployment process consists of three sequential steps, managed by specific scripts. The **deploy** script can be used, since it runs everything needed to deploy for FEaaS. To run, enter *npm run deploy* in the root of your solution.
+The component will need to be updated in: `\scripts\parcel\deploy-component.ts` <br />
+The first string is the React component filename. The second is the FEaaS component name that it will overwrite. 
+![deploy-component](docs/images/deploy-component.png?raw=true "deploy-component")
+
+You are now ready to deploy your component to XM Cloud.
+   ```sh
+   npm run deploy
+   ```
+
+The deployment process consists of three sequential steps, managed by specific scripts. The **deploy** script can be used, since it runs everything needed to deploy for FEaaS. 
 
 | Script     | Description                                                                  |
 | ---------- | ---------------------------------------------------------------------------- |
@@ -107,3 +113,17 @@ The deployment process consists of three sequential steps, managed by specific s
 | `deploy-1` | Prepares parcel files for export, ensuring all required assets are included. |
 | `deploy-2` | Executes the parcel build process to generate optimized assets.              |
 | `deploy-3` | Pushes HTML, CSS, and JavaScript files to the Media Library and FEaaS.       |
+
+## Appendix
+
+This Next.js app was created as a Vanilla Sitecore JSS App using this command:<br />
+`npx create-sitecore-jss@latest --yes --destination app --appName app --templates "nextjs, nextjs-sxa, nextjs-multisite, nextjs-xmcloud"`
+
+#### Notable Custom Code Reference
+| Code Area    | Description                                                                  |
+| ---------- | ---------------------------------------------------------------------------- |
+| `/src/parcel`   | These system files Handle the parcel export process	                                 |
+| `/script/parcel/*.ts` | Edit these inputs. These are the scripts executed by `npm run deploy` that build and push component to Media Library and FEaaS	 |
+| `/src/lib/sitecore-media` | Utilities to upload Sitecore Media item              |
+| `/src/components/AuthorHint` | Example component       |
+| `package.json` | Installed parcel, sitecore-feaas/sdk npm packages and added scripts explained above      |
