@@ -1,19 +1,10 @@
 ![Hackathon Logo](docs/images/hackathon.png?raw=true "Hackathon Logo")
-# Sitecore Hackathon 2025
-
-- MUST READ: **[Submission requirements](SUBMISSION_REQUIREMENTS.md)**
-- [Entry form template](ENTRYFORM.md)
-  
-![Hackathon Logo](docs/images/hackathon.png?raw=true "Hackathon Logo")
 
 # Sitecore Hackathon 2025
-
--   MUST READ: **[Submission requirements](SUBMISSION_REQUIREMENTS.md)**
--   [Entry form template](ENTRYFORM.md)
 
 ## Team name
 
-<img src="https://github.com/Sitecore-Hackathon/2024-Cloud-Surfers/blob/main/src/datasyncapp/public/logo-h.png?raw=true" width="350" alt="Cloud Surfers Logo"/>
+![Cloud Surfers Logo](docs/images/logo-h.png?raw=true "Cloud Surfers Logo")
 
 ## Category
 
